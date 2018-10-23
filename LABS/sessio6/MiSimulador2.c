@@ -56,8 +56,8 @@ void reference (unsigned int address, unsigned int LE) {
 
     miss	= (!valid[linea_mc] || cache[linea_mc] != tag);
     replacement = (valid[linea_mc]  && cache[linea_mc] != tag);
-    esc_mp = (replacement && dirty[linea_mc]);  
-    lec_mp = miss;
+    esc_mp 	= (replacement && dirty[linea_mc]);  
+    lec_mp 	= miss;
 
     if (esc_mp)
 	mida_esc_mp = 32;
@@ -71,13 +71,13 @@ void reference (unsigned int address, unsigned int LE) {
 	dirty[linea_mc] = 0;
     }
     else if (miss && replacement) {
-	tag_out = cache[linea_mc].tag;
-	cache[linea_mc].tag = tag;
-	cache[linea_mc].dirty = 0;
+	tag_out 	= cache[linea_mc];
+	cache[linea_mc] = tag;
+	dirty[linea_mc] = 0;
     }
 	
-    if (LE && !cache[linea_mc].dirty)
-	cache[linea_mc].dirty = 1;
+    if (LE && !dirty[linea_mc])
+	dirty[linea_mc] = 1;
 	
     n_miss += miss;
     n_hit  += !miss;
