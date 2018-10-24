@@ -21,9 +21,8 @@
  * */
 void init_cache () {
     for (int i = 0; i < 128; ++i){
-        cache[i] = -1;
-	valid[i] =  0;
-	dirty[i] =  0;
+	    valid[i] =  0;
+	    dirty[i] =  0;
     }
     n_hit  = 0;
     n_miss = 0;
@@ -47,33 +46,33 @@ void reference (unsigned int address, unsigned int LE) {
 
 	//LE pren el valor 0->Lectura, 1->escriptura
 
-    linea_mc    = (address & 0x00000FE0) >> 5 ;
+    linea_mc    = (address & 0x00000FE0) >> 5;
     bloque_m    = (address & 0xFFFFFFE0) >> 5;
     byte        = (address & 0x0000001F);
-    tag 	    = bloque_m>>7;
+    tag 	    = (address & 0xFFFFF000) >> 12;
     miss	    = 0;
     replacement = 0;
 
-    miss	= (!valid[linea_mc] || cache[linea_mc] != tag);
+    miss	    = (!valid[linea_mc] || cache[linea_mc] != tag);
     replacement = (valid[linea_mc]  && cache[linea_mc] != tag);
-    esc_mp 	= (replacement && dirty[linea_mc]);  
-    lec_mp 	= miss;
+    esc_mp 	    = (replacement && dirty[linea_mc]);  
+    lec_mp 	    = miss;
 
     if (esc_mp)
-	mida_esc_mp = 32;
+    	mida_esc_mp = 32;
 
     if (lec_mp)
-	mida_lec_mp = 32;
+    	mida_lec_mp = 32;
 
     if (miss && !replacement) {
         cache[linea_mc] = tag;
-	valid[linea_mc] = 1;
-	dirty[linea_mc] = 0;
+    	valid[linea_mc] = 1;
+    	dirty[linea_mc] = 0;
     }
     else if (miss && replacement) {
-	tag_out 	= cache[linea_mc];
-	cache[linea_mc] = tag;
-	dirty[linea_mc] = 0;
+    	tag_out 	    = cache[linea_mc];
+    	cache[linea_mc] = tag;
+    	dirty[linea_mc] = 1;
     }
 	
     if (LE && !dirty[linea_mc])
