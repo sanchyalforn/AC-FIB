@@ -1,0 +1,15 @@
+    movl    $1, %ebx
+for:
+    cmpl    12(%ebp),%ebx
+    jge     fifor
+    movl    8(%ebp),%ecx
+    movl    (%ecx,%ebx,4),%ecx
+    movl    (%ecx), %ecx
+    cmpl    %ecx,-4(%ebp)
+    jge fiif
+    movl %ecx,-4(%ebp)
+fiif:
+    incl %ebx
+    jmp for
+fifor:
+    movl %ebx, -8(%ebp)
