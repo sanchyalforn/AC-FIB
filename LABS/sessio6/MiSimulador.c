@@ -21,8 +21,8 @@
  * La cache es inicialitzada al començar cada un dels tests.
  * */
 void init_cache () {
-	
-    for (int i = 0; i < 128; ++i)
+	int i;
+    for (i = 0; i < 128; ++i)
     	valid[i] =  0;
     n_hit  = 0;
     n_miss = 0; 
@@ -61,28 +61,75 @@ void reference (unsigned int address, unsigned int LE) {
     //Write No Allocate -> No es porta a MC (escriu directament  a MP)  
 
     // LE = 0 if READ else WRITE
-    miss 	    = (!valid[linea_mc] || cache[linea_mc] != tag);
-    replacement = (!LE && valid[linea_mc] && cache[linea_mc] != tag);
-    if (LE)
-	    mida_esc_mp = 1;
-
-    else {
-	    if (lec_mp)
-	        mida_lec_mp = 32;
-
-    	if (miss && !replacement) {
-     	    cache[linea_mc] = tag;
-	        valid[linea_mc] = 1;
+    if(!LE){
+    	// Lectura
+	    if (valid[linea_mc]){
+	        if (cache[linea_mc] == tag){
+	        	//Hit lectura
+	            miss = 0;
+	            replacement = 0;
+	            tag_out = 0;
+	            lec_mp = 0;
+	            mida_lec_mp = 0;
+	            esc_mp = 0;
+	            mida_esc_mp = 0;
+	        }
+	        else{
+	        	//Miss de lectura
+	            miss = 1;
+	            tag_out = cache[linea_mc];
+	            replacement = 1;
+	            cache[linea_mc] = tag;
+	            lec_mp = 1;
+	            mida_lec_mp = 32;
+	            esc_mp = 0;
+	            mida_esc_mp = 0;
+	        }
 	    }
-
-	    else if (miss && replacement) {
-            tag_out = cache[linea_mc];
+	    else{
+	        miss = 1;
+	        replacement = 0;
+	        tag_out = 0;
 	        cache[linea_mc] = tag;
+	        valid[linea_mc] = 1;
+	        lec_mp = 1;
+	        mida_lec_mp = 32;
+	        esc_mp = 0;
+	        mida_esc_mp = 0;
 	    }
-    }
-
-   n_miss += miss;
-   n_hit  += !miss;
+	}
+	else{
+		if (valid[linea_mc]){
+	        if (cache[linea_mc] == tag){
+	        	//Hit escriptura
+	            miss = 0;
+	            replacement = 0;
+	            tag_out = 0;
+	            lec_mp = 0;
+	            mida_lec_mp = 0;
+	            esc_mp = 1;
+	            mida_esc_mp = 1;
+	        }
+	        else{
+	            miss = 1;
+	            replacement = 0;
+	            tag_out = 0;
+	            lec_mp = 0;
+	            mida_lec_mp = 0;
+	            esc_mp = 1;
+	            mida_esc_mp = 1;
+	        }
+	    }
+	    else{
+	        miss = 1;
+	        replacement = 0;
+	        tag_out = 0;
+	        lec_mp = 0;
+	        mida_lec_mp = 0;
+	        esc_mp = 1;
+	        mida_esc_mp = 1;
+	    }
+	}
 
 	/* La funcio test_and_print escriu el resultat de la teva simulacio
 	 * per pantalla (si s'escau) i comproba si hi ha algun error
@@ -98,3 +145,4 @@ void final () {
        
   
 }
+
