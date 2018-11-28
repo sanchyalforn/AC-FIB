@@ -39,7 +39,7 @@ int main() {
       x = x + 0.02;
     }
 
-  t1 = GetTime();
+  // t1 = GetTime();
 
   // CODIGO A EVALUAR: forma ijk del producto de dos matrices de tamaño NxN
   for (i=0; i<N; i++) 
@@ -54,11 +54,11 @@ int main() {
    * (t2-t1) es el tiempo medido en tics que tarda
    * en ejecutarse el codigo que queremos evaluar
    */ 
-  t2 = GetTime();
+//  t2 = GetTime();
 
   // Fin, NO lo evaluamos ni para MIPS ni para MFLOPS
   if (N > 6) {
-    printf("FORMA ijk (%d), Milisegundos = %9f \n\n", N, t2 - t1);
+  //    printf("FORMA ijk (%d), Milisegundos = %9f \n\n", N, t2 - t1);
   }
   if (N <= 6) {
     /* 
